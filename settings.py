@@ -1,18 +1,24 @@
 from PIL import Image
+import pyscreeze
 
 #CONSTANTS
 
 STOP_AT_UNKNOWN_CELL = True
 
+MINIMUM_CELL_SIZE = 10
+
 #Board Types
 BEGINNER_BOARD = (9, 9)
-BEGINNER_MINES = 10
 
 HARD_BOARD = (16, 16)
-HARD_MINES = 40
 
 EXPERT_BOARD = (30, 30)
-EXPERT_MINES = 99
+
+MINE_COUNTS = {
+    BEGINNER_BOARD: 10,
+    HARD_BOARD: 40,
+    EXPERT_BOARD: 99
+}
 
 #Cell Types
 CELL_MINE = -1
@@ -44,21 +50,42 @@ class minesweeperGame():
 
         self.click_pause = 0.05
 
+    def is_field_color(self, pixel):
+        i = 0
+        while i < len(self.field_color) - 1:
+            if pixel[i] <= self.field_color[i] + 1 and pixel[i] >= self.field_color[1] - 1:
+                i += 1
+            else:
+                return False
+        if pixel[3] == self.field_color[3]:
+            return True
+        return False
+
 MINESWEEPER_MACOS = minesweeperGame(
     field_color=(95, 95, 95, 255),
     tile_samples={
-        "./tiles/mac-0.png" : 0,
-        "./tiles/mac-1.png" : 1,
-        "./tiles/mac-2.png" : 2,
-        "./tiles/mac-3.png" : 3,
-        "./tiles/mac-4.png" : 4,
-        "./tiles/mac-5.png" : 5,
-        "./tiles/mac-6.png" : 6,
-        "./tiles/mac-7.png" : 7,
-        "./tiles/mac-8.png" : 8,
-        "./tiles/mac-mine.png" : CELL_MINE,
-        "./tiles/mac-covered.png" : CELL_COVERED,
-        "./tiles/mac-FLAG.png" : CELL_MINE,
-        "./tiles/mac-explosion.png" : CELL_EXPLOADED_MINE,
+        # "./tiles/mac-0.png" : 0,
+        # "./tiles/mac-1.png" : 1,
+        # "./tiles/mac-2.png" : 2,
+        # "./tiles/mac-3.png" : 3,
+        # "./tiles/mac-4.png" : 4,
+        # "./tiles/mac-5.png" : 5,
+        # "./tiles/mac-6.png" : 6,
+        # "./tiles/mac-7.png" : 7,
+        # "./tiles/mac-8.png" : 8,
+        # "./tiles/mac-mine.png" : CELL_MINE,
+        # "./tiles/mac-covered.png" : CELL_COVERED,
+        # "./tiles/mac-FLAG.png" : CELL_MINE,
+        # "./tiles/mac-explosion.png" : CELL_EXPLOADED_MINE,
         }
     )
+
+class ScreenProps:
+
+    def __init__(self):
+
+        screen = pyscreeze.screenshot()
+        self.height = screen.size[1]
+        self.width = screen.size[0]
+
+SCREEN = ScreenProps()
