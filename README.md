@@ -1,2 +1,2 @@
 # minesweeper-bot
-A bot that plays minesweeper
+A bot that plays minesweeper - in progress
