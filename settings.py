@@ -64,9 +64,9 @@ class minesweeperGame():
 MINESWEEPER_MACOS = minesweeperGame(
     field_color=(95, 95, 95, 255),
     tile_samples={
-        # "./tiles/mac-0.png" : 0,
-        # "./tiles/mac-1.png" : 1,
-        # "./tiles/mac-2.png" : 2,
+        "./tiles/0.png" : 0,
+        "./tiles/1.png" : 1,
+        "./tiles/2.png" : 2,
         # "./tiles/mac-3.png" : 3,
         # "./tiles/mac-4.png" : 4,
         # "./tiles/mac-5.png" : 5,
@@ -74,7 +74,7 @@ MINESWEEPER_MACOS = minesweeperGame(
         # "./tiles/mac-7.png" : 7,
         # "./tiles/mac-8.png" : 8,
         # "./tiles/mac-mine.png" : CELL_MINE,
-        # "./tiles/mac-covered.png" : CELL_COVERED,
+        "./tiles/covered.png" : CELL_COVERED,
         # "./tiles/mac-FLAG.png" : CELL_MINE,
         # "./tiles/mac-explosion.png" : CELL_EXPLOADED_MINE,
         }

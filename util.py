@@ -1,10 +1,11 @@
+import numpy
 import pyscreeze
 from PIL import ImageDraw
 
 from settings import BEGINNER_BOARD, EXPERT_BOARD, HARD_BOARD, MINE_COUNTS, MINESWEEPER_MACOS, MINIMUM_CELL_SIZE, SCREEN
 
 
-def find_game():
+def find_game(settings=MINESWEEPER_MACOS):
     '''Take a screenshot and scan the image to find the minesweeper game
     '''
 
@@ -14,17 +15,20 @@ def find_game():
 
     if len(found) < 10:
         print(f"Cannot find game - only found {len(found)} squares")
-        return False
+        return numpy.array([]), [], 0, False
     
     board_size, mine_count = deduce_game_difficulty(found)
     
     if mine_count == 0:
         print(f"Invalid board size - {board_size[0]} x {board_size[1]}")
-        return False
+        image.show()
+        return numpy.array([]), [], 0, False
     
     print(f"Found board size of {board_size[0]} x {board_size[1]} - infering mine count of {mine_count}")
 
+    board = arrange_board(found, board_size)
 
+    return board, board_size, mine_count, True
 def find_all_squares(image):
     '''Given an image, try to find squares that match the defined field color for the game'''
     draw = ImageDraw.Draw(image)
@@ -53,8 +57,7 @@ def find_all_squares(image):
                     # Paint it over, so we will not have to test
                     # these pixels again
                     draw.line((left, top, right, top), fill="white")
-                    draw.line((left, top, left, bottom), fill="white")
-    image.show()        
+                    draw.line((left, top, left, bottom), fill="white")       
     return found
                     
 
@@ -84,7 +87,7 @@ def deduce_game_difficulty(found):
 
     # I don't know why, but for 9X9 - 81 squares are correctly found,
     # but it is coming up with a board count of 10 x 10
-    print(len(found))
+    print(f"Squares found: {len(found)}")
 
     game_width = len(set((left for left, _, _, _, in found))) -1 
 
@@ -96,6 +99,26 @@ def deduce_game_difficulty(found):
     
     return (game_width, game_height), mine_count
 
+def arrange_board(found, board_size):
+    grid = numpy.array(found, dtype=object)
+    grid = numpy.reshape(grid, list(board_size) + [4])
+    return grid
 
-find_game()
+def identify_tile(tile):
+    for sample in MINESWEEPER_MACOS.samples:
+        difference = get_difference(tile, sample)
 
+        if difference > 100:
+            filename = f"./samples/unknown.png"
+            tile.save(filename)
+        
+def get_difference(image1, image2):
+    pixels1 = image1.load()
+    pixels2 = image2.load()
+    difference = 0
+    for i in range(min(image1.size[0], image2.size[0])):
+        for j in range(min(image1.size[1], image2.size[1])):
+            for position in range(3):
+                difference += abs(pixels1[i, j][position] -
+                                    pixels2[i, j][position])
+    return difference
