@@ -12,7 +12,7 @@ BEGINNER_BOARD = (9, 9)
 
 HARD_BOARD = (16, 16)
 
-EXPERT_BOARD = (30, 30)
+EXPERT_BOARD = (30, 16)
 
 MINE_COUNTS = {
     BEGINNER_BOARD: 10,
@@ -22,7 +22,7 @@ MINE_COUNTS = {
 
 #Cell Types
 CELL_MINE = -1
-CELL_COVERED = -2
+CELL_COVERED = 0
 CELL_FALSE_MINE = -3
 CELL_EXPLOADED_MINE = -4
 
@@ -64,18 +64,19 @@ class minesweeperGame():
 MINESWEEPER_MACOS = minesweeperGame(
     field_color=(95, 95, 95, 255),
     tile_samples={
-        "./tiles/0.png" : 0,
+        "./tiles/empty.png" : -2,
         "./tiles/1.png" : 1,
+        "./tiles/1-edge.png" : 1,
         "./tiles/2.png" : 2,
-        # "./tiles/mac-3.png" : 3,
-        # "./tiles/mac-4.png" : 4,
+        "./tiles/3.png" : 3,
+        "./tiles/4.png" : 4,
         # "./tiles/mac-5.png" : 5,
         # "./tiles/mac-6.png" : 6,
         # "./tiles/mac-7.png" : 7,
         # "./tiles/mac-8.png" : 8,
         # "./tiles/mac-mine.png" : CELL_MINE,
         "./tiles/covered.png" : CELL_COVERED,
-        # "./tiles/mac-FLAG.png" : CELL_MINE,
+        "./tiles/flag.png" : CELL_MINE,
         # "./tiles/mac-explosion.png" : CELL_EXPLOADED_MINE,
         }
     )

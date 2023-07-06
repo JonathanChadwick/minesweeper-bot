@@ -105,12 +105,12 @@ def arrange_board(found, board_size):
     return grid
 
 def identify_tile(tile):
-    for sample in MINESWEEPER_MACOS.samples:
+    for sample, value in MINESWEEPER_MACOS.samples:
         difference = get_difference(tile, sample)
 
-        if difference > 100:
-            filename = f"./samples/unknown.png"
-            tile.save(filename)
+        if difference < 3500:
+            return value
+    return 10
         
 def get_difference(image1, image2):
     pixels1 = image1.load()
