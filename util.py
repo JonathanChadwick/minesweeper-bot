@@ -108,7 +108,7 @@ def identify_tile(tile):
     for sample, value in MINESWEEPER_MACOS.samples:
         difference = get_difference(tile, sample)
 
-        if difference < 3500:
+        if difference < 4000:
             return value
     return 10
         
