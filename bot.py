@@ -84,58 +84,34 @@ class MinesweeperBot:
                     else:
                         self.game_state[j, i] = tile
 
+    def get_neighbors(self, x, y):
+        directions = [
+            (-1, -1), (-1, 0), (-1, 1),
+            (0, -1),           (0, 1),
+            (1, -1), (1, 0), (1, 1)
+        ]
+
+        neighbors = []
+
+        for dx, dy in directions:
+            new_x, new_y = x + dx, y + dy
+            if 0 <= new_x < self.board_size[1] and 0 <= new_y < self.board_size[0]:
+                neighbors.append((new_x, new_y))
+    
+        return neighbors
 
     def deduce_obvious_mines(self, coordinates):
         x, y = coordinates
         cell_value = self.game_state[y, x]
         covered = []
-        if x > 0:
-            if self.game_state[y, x - 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y, x - 1] == 0:
-                covered.append((y, x - 1))
         
-        if y > 0:
-            if self.game_state[y - 1, x] == -1:
-                cell_value -= 1
-            elif self.game_state[y - 1, x] == 0:
-                covered.append((y - 1 , x))
+        for neighbor_x, neighbor_y in self.get_neighbors(x, y):
+            neighbor_value = self.game_state[neighbor_y, neighbor_x]
         
-        if y > 0 and x > 0:
-            if self.game_state[y - 1, x - 1] == -1:
+            if neighbor_value == -1:
                 cell_value -= 1
-            elif self.game_state[y - 1, x - 1] == 0:
-                covered.append((y - 1, x - 1))
-        
-        if y > 0 and x < self.board_size[0] - 1:
-            if self.game_state[y - 1, x + 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y - 1, x + 1] == 0:
-                covered.append((y - 1, x + 1))
-        
-        if x > 0 and y < self.board_size[0] - 1:
-            if self.game_state[y + 1, x - 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y + 1, x - 1] == 0:
-                covered.append((y + 1, x - 1))
-        
-        if y < self.board_size[0] - 1 and x < self.board_size[0] - 1:
-            if self.game_state[y + 1, x + 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y + 1, x + 1] == 0:
-                covered.append((y + 1, x + 1))
-        
-        if y < self.board_size[0] - 1:
-            if self.game_state[y + 1, x] == -1:
-                cell_value -= 1
-            elif self.game_state[y + 1, x] == 0:
-                covered.append((y + 1, x))
-
-        if x < self.board_size[0] - 1:
-            if self.game_state[y, x + 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y, x + 1] == 0:
-                covered.append((y, x + 1))
+            elif neighbor_value == 0:
+                covered.append((neighbor_x, neighbor_y))
 
         if cell_value == len(covered):
             self.mines.update(covered)
@@ -148,53 +124,13 @@ class MinesweeperBot:
         x, y = coordinates
         cell_value = self.game_state[y, x]
         covered = []
-        if x > 0:
-            if self.game_state[y, x - 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y, x - 1] == 0:
-                covered.append((y, x - 1))
+        for neighbor_x, neighbor_y in self.get_neighbors(x, y):
+            neighbor_value = self.game_state[neighbor_y, neighbor_x]
         
-        if y > 0:
-            if self.game_state[y - 1, x] == -1:
+            if neighbor_value == -1:
                 cell_value -= 1
-            elif self.game_state[y - 1, x] == 0:
-                covered.append((y - 1 , x))
-        
-        if y > 0 and x > 0:
-            if self.game_state[y - 1, x - 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y - 1, x - 1] == 0:
-                covered.append((y - 1, x - 1))
-        
-        if y > 0 and x < self.board_size[0] - 1:
-            if self.game_state[y - 1, x + 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y - 1, x + 1] == 0:
-                covered.append((y - 1, x + 1))
-        
-        if x > 0 and y < self.board_size[0] - 1:
-            if self.game_state[y + 1, x - 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y + 1, x - 1] == 0:
-                covered.append((y + 1, x - 1))
-        
-        if y < self.board_size[0] - 1 and x < self.board_size[0] - 1:
-            if self.game_state[y + 1, x + 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y + 1, x + 1] == 0:
-                covered.append((y + 1, x + 1))
-        
-        if y < self.board_size[0] - 1:
-            if self.game_state[y + 1, x] == -1:
-                cell_value -= 1
-            elif self.game_state[y + 1, x] == 0:
-                covered.append((y + 1, x))
-
-        if x < self.board_size[0] - 1:
-            if self.game_state[y, x + 1] == -1:
-                cell_value -= 1
-            elif self.game_state[y, x + 1] == 0:
-                covered.append((y, x + 1))
+            elif neighbor_value == 0:
+                covered.append((neighbor_x, neighbor_y))
 
         if cell_value == 0:
             return covered
